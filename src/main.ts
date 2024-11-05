@@ -28,8 +28,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
 
-  console.log('__ENV__', process.env.PORT);
-
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
