@@ -48,7 +48,7 @@ export class AuthService {
             ...user, password: await generateHash(password)
         };
 
-        return this.userModel.create(userBody);
+        return this.userModel.create(userParse);
     }
 
 

@@ -23,8 +23,8 @@ export class CoursesService {
     return `This action returns all courses`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  findOne(title: string) {
+    return this.courseModel.find({title: title});
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {
