@@ -12,10 +12,10 @@ export class RolesGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
 
     const getRolMeta = this.reflector.get<string[]>('rol', context.getHandler());
-    console.log('___', getRolMeta);
 
     const req = context.getArgByIndex(0);
     const {roles} = req.user;
+  
 
     // TODO: Array roles que tiene el usuario ['admin'] DB
     // TODO: Array roles permitidos para este controlador

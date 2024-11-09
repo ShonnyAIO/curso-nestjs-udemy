@@ -1,9 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpException, HttpStatus, ParseIntPipe, UseGuards, Req, SetMetadata } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { SlugPipe } from './slug/slug.pipe';
 import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
 import { Request } from 'express';
 import { RolesGuard } from 'src/roles/roles.guard';
@@ -23,12 +21,19 @@ export class CoursesController {
     return this.coursesService.create(create);
   }
 
+  @Get('')
+  @HttpCode(200)
+  // @Rol(['admin', 'user', 'manager'])
+  getListCourses(){
+    return this.coursesService.findAll();
+  }
+
+  /*
   @ApiBearerAuth()
-  @Rol(['admin'])
+  @Rol(['manager'])
   @Get(':title')
   getDetail(@Req() req:Request, @Param('title', new SlugPipe()) title:string) { // TODO el mejor libro del mundo
-    // TODO el-mejor-libro-del-mundo
     title = req.params.title;
     return this.coursesService.findOne(title);
-  }
+  } */
 }
