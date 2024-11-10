@@ -17,6 +17,9 @@ export class User {
     roles: string[];
 
     @Prop()
+    name: string;
+
+    @Prop()
     avatar: string;
 
     @Prop()

@@ -16,7 +16,12 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 @Module({
   imports: [CoursesModule, AuthModule, VideosModule, AwardsModule, ConfigModule.forRoot({ isGlobal: true}), ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', 'public'),
-  }), MongooseModule.forRoot(process.env.DB_URI), UsersModule, EventEmailModule, EventEmitterModule.forRoot()],
+  }), MongooseModule.forRoot(process.env.DB_URI, {
+    connectionFactory: (connection) => {
+      connection.plugin(require('mongoose-delete'), { overrideMethods: 'all' });
+      return connection;
+    }
+  }), UsersModule, EventEmailModule, EventEmitterModule.forRoot()],
   controllers: [AppController],
   providers: [AppService],
 })

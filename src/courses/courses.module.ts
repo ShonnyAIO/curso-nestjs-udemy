@@ -8,19 +8,9 @@ import { UserSchema, User } from 'src/users/models/users.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema }
+      { name: User.name, schema: UserSchema },
+      { name: Course.name, schema: CourseSchema}
     ]),
-    MongooseModule.forFeatureAsync([
-      {
-        name: Course.name,
-        useFactory: () => {
-          const schema = CourseSchema;
-          const pluginOption = { overrideMethods: 'all' };
-          schema.plugin(require('mongoose-delete'), pluginOption);
-          return schema;
-        }
-      }
-    ])
   ],
   controllers: [CoursesController],
   providers: [CoursesService],

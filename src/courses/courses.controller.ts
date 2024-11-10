@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpException, HttpStatus, ParseIntPipe, UseGuards, Req, SetMetadata } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpException, HttpStatus, ParseIntPipe, UseGuards, Req } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -21,11 +21,20 @@ export class CoursesController {
     return this.coursesService.create(create);
   }
 
-  @Get('')
+  @ApiBearerAuth()
+  @Get()
   @HttpCode(200)
-  // @Rol(['admin', 'user', 'manager'])
+  @Rol(['admin', 'user', 'manager'])
   getListCourses(){
     return this.coursesService.findAll();
+  }
+
+  @ApiBearerAuth()
+  @Delete(':id')
+  @HttpCode(200)
+  @Rol(['admin', 'user', 'manager'])
+  deleteCourse(@Param('id') id: string){
+    return this.coursesService.remove(id);
   }
 
   /*

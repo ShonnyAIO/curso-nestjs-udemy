@@ -18,16 +18,16 @@ export class AuthService {
     * @param userBody
     * @returns
     */
-    public async login(userLoginBody: LoginAuthDto){
+    public async login(userLoginBody: LoginAuthDto) {
 
         const { password } = userLoginBody;
         const userExits = await this.userModel.findOne({ email: userLoginBody.email });
 
-        if(!userExits) throw new HttpException("NOT_FOUND", HttpStatus.NOT_FOUND);
+        if (!userExits) throw new HttpException("NOT_FOUND", HttpStatus.NOT_FOUND);
 
         const isCheck = await compareHash(password, userExits.password);
 
-        if(!isCheck) throw new HttpException("PASSWORD INVALIDA", HttpStatus.CONFLICT);
+        if (!isCheck) throw new HttpException("PASSWORD INVALIDA", HttpStatus.CONFLICT);
 
         const userFlat = userExits.toObject();
         delete userFlat.password;
@@ -38,17 +38,17 @@ export class AuthService {
 
         const token = this.jwtService.sign(payload);
 
+        const data = {
+            token: token,
+            user: userFlat
+        }
+
         /*
         * Enviar (evento) de email
         */
         this.eventEmitter.emit(
             'user.login', userFlat
         );
-
-        const data = {
-            token : token,
-            user : userFlat
-        }
 
         return data;
 
