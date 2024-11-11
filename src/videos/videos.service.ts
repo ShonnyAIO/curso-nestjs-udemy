@@ -18,7 +18,7 @@ export class VideosService {
     return this.videoModel.find({});
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.videoModel.findOne({id});
   }
 
