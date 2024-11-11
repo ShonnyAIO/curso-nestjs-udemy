@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EventEmailModule } from './event-email/event-email.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [CoursesModule, AuthModule, VideosModule, AwardsModule, ConfigModule.forRoot({ isGlobal: true}), ServeStaticModule.forRoot({
@@ -21,7 +22,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       connection.plugin(require('mongoose-delete'), { overrideMethods: 'all' });
       return connection;
     }
-  }), UsersModule, EventEmailModule, EventEmitterModule.forRoot()],
+  }), UsersModule, EventEmailModule, EventEmitterModule.forRoot(), MailModule],
   controllers: [AppController],
   providers: [AppService],
 })

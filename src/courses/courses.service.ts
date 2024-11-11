@@ -59,12 +59,16 @@ export class CoursesService {
     return this.courseModel.findAllCourses({});
   }
 
-  findOne(title: string) {
-    return this.courseModel.find({title: title});
+  findOne(id: string) {
+    return this.courseModel.find({id});
   }
 
-  update(id: number, updateCourseDto: UpdateCourseDto) {
-    return `This action updates a #${id} course`;
+  findOneByTitle(title: string){
+    return this.courseModel.find({title});
+  }
+
+  update(id: string, updateCourseDto: UpdateCourseDto) {
+    return this.courseModel.findOneAndUpdate({id}, updateCourseDto);
   }
 
   async remove(id: string) {
