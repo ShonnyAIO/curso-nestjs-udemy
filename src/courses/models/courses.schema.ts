@@ -4,10 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type CourseDocument = Course & Document;
 
-@Schema({timestamps: true})
+@Schema({ timestamps: true })
 export class Course {
 
-    @Prop({ unique: true, default : uuidv4 })
+    @Prop({ unique: true, default: uuidv4 })
     id: string;
 
     @Prop({ required: true })
@@ -28,29 +28,36 @@ export class Course {
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
 
-/*
-CourseSchema.statics.findAllCourses = function(){
+CourseSchema.statics.findAllCourses = function () {
     const list = this.aggregate(
         [
             {
-                '$lookup' : {
-                    from : 'users',
-                    foreignField: '_id',
-                    localField : 'idAuthor',
-                    as : 'author',
-                    pipeline : [
+                $lookup: {
+                    from: 'users', // TODO
+                    // foreignField : 'id',
+                    // localField : 'idAuthor',
+                    let: { idAuthor: "$idAuthor" },
+                    pipeline: [ // TODO estoy actuando sobre la collection de users
                         {
-                            $project : {
-                                _id : 0,
-                                name : 1,
-                                email : 1,
-                                avatar : 1
+                            $match: {
+                                $expr: { $eq: ["$$idAuthor", "$id"] },
+                            }
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                name: 1,
+                                email: 1
                             }
                         }
-                    ]
+                    ],
+                    as: 'author',
                 }
+            },
+            {
+                $unwind: '$author'
             }
         ]
     );
     return list;
-}; */
+};

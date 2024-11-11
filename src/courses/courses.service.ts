@@ -7,7 +7,8 @@ import { User, UserDocument } from 'src/users/models/users.schema';
 import { Model, Types } from 'mongoose';
 
 interface ModelExt<T> extends Model<T> {
-  delete:Function
+  delete:Function,
+  findAllCourses: Function
 }
 
 
@@ -25,6 +26,7 @@ export class CoursesService {
   }
 
   async findAll() {
+    /*
     // TODO Estamos trabajando en la collection de COURSES
     const list = this.courseModel.aggregate([
       {
@@ -53,9 +55,8 @@ export class CoursesService {
       {
         $unwind : '$author'
       }
-    ]);
-    // return this.courseModel.find({});
-    return list;
+    ]); */
+    return this.courseModel.findAllCourses({});
   }
 
   findOne(title: string) {
