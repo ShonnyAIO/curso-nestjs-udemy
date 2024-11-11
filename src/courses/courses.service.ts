@@ -24,8 +24,38 @@ export class CoursesService {
     return this.courseModel.create(createCourseDto)
   }
 
-  findAll() {
-    return this.courseModel.find({});
+  async findAll() {
+    // TODO Estamos trabajando en la collection de COURSES
+    const list = this.courseModel.aggregate([
+      {
+        $lookup : {
+          from : 'users', // TODO
+          // foreignField : 'id',
+          // localField : 'idAuthor',
+          let : { idAuthor : "$idAuthor"} ,
+          pipeline : [ // TODO estoy actuando sobre la collection de users
+            {
+              $match : {
+                $expr: { $eq: ["$$idAuthor", "$id"] },
+              }
+            },
+            {
+              $project : {
+                _id : 0,
+                name : 1,
+                email : 1
+              }
+            }
+          ],
+          as : 'author',
+        }
+      },
+      {
+        $unwind : '$author'
+      }
+    ]);
+    // return this.courseModel.find({});
+    return list;
   }
 
   findOne(title: string) {
