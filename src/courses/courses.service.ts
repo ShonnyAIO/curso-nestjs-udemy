@@ -7,8 +7,9 @@ import { User, UserDocument } from 'src/users/models/users.schema';
 import { Model, Types } from 'mongoose';
 
 interface ModelExt<T> extends Model<T> {
-  delete:Function,
-  findAllCourses: Function
+  delete:Function;
+  findAllCourses: Function;
+  paginate: Function;
 }
 
 
@@ -25,7 +26,7 @@ export class CoursesService {
     return this.courseModel.create(createCourseDto)
   }
 
-  async findAll() {
+  async findAll(pagination: any) {
     /*
     // TODO Estamos trabajando en la collection de COURSES
     const list = this.courseModel.aggregate([
@@ -56,7 +57,8 @@ export class CoursesService {
         $unwind : '$author'
       }
     ]); */
-    return this.courseModel.findAllCourses({});
+    // return this.courseModel.findAllCourses({});
+    return this.courseModel.paginate({}, pagination);
   }
 
   findOne(id: string) {

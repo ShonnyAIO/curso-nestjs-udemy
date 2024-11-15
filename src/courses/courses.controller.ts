@@ -7,6 +7,7 @@ import { Request } from 'express';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Rol } from 'src/decorators/rol/rol.decorator';
 import { SlugPipe } from './slug/slug.pipe';
+import { PaginateV2 } from 'src/paginate-v2/paginate-v2.decorator';
 
 @ApiTags('courses')
 @Controller('courses') //TODO http://localhost:3000/v1/courses
@@ -26,8 +27,8 @@ export class CoursesController {
   @Get()
   @HttpCode(200)
   @Rol(['admin', 'user', 'manager'])
-  getListCourses(){
-    return this.coursesService.findAll();
+  getListCourses(@PaginateV2() pagination: any){
+    return this.coursesService.findAll(pagination);
   }
 
   @ApiBearerAuth()
@@ -51,7 +52,7 @@ export class CoursesController {
   @Get(':id')
   @Rol(['admin', 'user', 'manager'])
   @HttpCode(200)
-  getCourseDetail(@Param('id') id:string) {
+  getCourseDetail(@Param('id') id:string, @PaginateV2() paginate: any) {
     return this.coursesService.findOne(id);
   }
 
