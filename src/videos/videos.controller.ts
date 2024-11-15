@@ -6,10 +6,9 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
   UseInterceptors,
   UploadedFile,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { VideosService } from './videos.service';
 import { CreateVideoDto } from './dto/create-video.dto';
@@ -29,7 +28,10 @@ import { Rol } from 'src/decorators/rol/rol.decorator';
 @Controller('videos') // TODO localhost:3000/videos
 // @UsePipes(new ValidationPipe())
 export class VideosController {
-  constructor(private readonly videosService: VideosService, private readonly courseService: CoursesService) {}
+  constructor(
+    private readonly videosService: VideosService,
+    private readonly courseService: CoursesService,
+  ) {}
   // Injectamos el servicio que necesitamos consultar
 
   @Post() // TODO POST http://localhost:3000/videos
@@ -41,8 +43,11 @@ export class VideosController {
 
   @Post('upload/:id') // TODO POST http://localhost:3000/v1/videos/upload
   @Rol(['admin'])
-  @UseInterceptors(FileInterceptor('file', { storage: storage}))
-  handleUpload(@Param('id') id:string, @UploadedFile() file: Express.Multer.File){
+  @UseInterceptors(FileInterceptor('file', { storage: storage }))
+  handleUpload(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return this.videosService.addVideo(id, file.filename);
   }
 

@@ -6,14 +6,14 @@ import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: true
+    cors: true,
   });
 
-  app.use(json({ limit : '60mb'}));
+  app.use(json({ limit: '60mb' }));
 
   app.enableVersioning({
     defaultVersion: '1',
-    type : VersioningType.URI
+    type: VersioningType.URI,
   });
 
   const config = new DocumentBuilder()

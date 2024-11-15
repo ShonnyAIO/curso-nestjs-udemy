@@ -10,73 +10,72 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private readonly eventEmitter: EventEmitter2,
+    private readonly jwtService: JwtService,
+  ) {}
 
-    constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>, private readonly eventEmitter: EventEmitter2, private readonly jwtService: JwtService) { }
+  /*
+   * INICIAR SESION
+   * @param userBody
+   * @returns
+   */
+  public async login(userLoginBody: LoginAuthDto) {
+    const { password } = userLoginBody;
+    const userExits = await this.userModel.findOne({
+      email: userLoginBody.email,
+    });
 
-    /*
-    * INICIAR SESION
-    * @param userBody
-    * @returns
-    */
-    public async login(userLoginBody: LoginAuthDto) {
+    if (!userExits) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
-        const { password } = userLoginBody;
-        const userExits = await this.userModel.findOne({ email: userLoginBody.email });
+    const isCheck = await compareHash(password, userExits.password);
 
-        if (!userExits) throw new HttpException("NOT_FOUND", HttpStatus.NOT_FOUND);
+    if (!isCheck)
+      throw new HttpException('PASSWORD INVALIDA', HttpStatus.CONFLICT);
 
-        const isCheck = await compareHash(password, userExits.password);
+    const userFlat = userExits.toObject();
+    delete userFlat.password;
 
-        if (!isCheck) throw new HttpException("PASSWORD INVALIDA", HttpStatus.CONFLICT);
+    const payload = {
+      id: userFlat._id,
+    };
 
-        const userFlat = userExits.toObject();
-        delete userFlat.password;
+    const token = this.jwtService.sign(payload);
 
-        const payload = {
-            id: userFlat._id
-        }
-
-        const token = this.jwtService.sign(payload);
-
-        const data = {
-            token: token,
-            user: userFlat
-        }
-
-        /*
-        * Enviar (evento) de email
-        */
-        this.eventEmitter.emit(
-            'user.login', userFlat
-        );
-
-        return data;
-
-    }
+    const data = {
+      token: token,
+      user: userFlat,
+    };
 
     /*
-    * REGISTRAR USUARIO
-    * @param userBody
-    * @returns
-    */
-    public async register(userBody: RegisterAuthDto) {
-        const { password, ...user } = userBody;
+     * Enviar (evento) de email
+     */
+    this.eventEmitter.emit('user.login', userFlat);
 
-        const userParse = {
-            ...user, password: await generateHash(password)
-        };
+    return data;
+  }
 
-        const newUser = await this.userModel.create(userParse);
+  /*
+   * REGISTRAR USUARIO
+   * @param userBody
+   * @returns
+   */
+  public async register(userBody: RegisterAuthDto) {
+    const { password, ...user } = userBody;
 
-        /*
-        * Enviar (evento) de email
-        */
-        this.eventEmitter.emit(
-            'user.created', newUser
-        );
+    const userParse = {
+      ...user,
+      password: await generateHash(password),
+    };
 
-        return newUser;
-    }
+    const newUser = await this.userModel.create(userParse);
 
+    /*
+     * Enviar (evento) de email
+     */
+    this.eventEmitter.emit('user.created', newUser);
 
+    return newUser;
+  }
 }

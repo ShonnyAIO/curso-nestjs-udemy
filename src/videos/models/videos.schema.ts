@@ -4,26 +4,25 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type VideoDocument = Video & Document;
 
-@Schema({timestamps: true})
+@Schema({ timestamps: true })
 export class Video {
+  @Prop({ unique: true, default: uuidv4 })
+  id: string;
 
-    @Prop({ unique: true, default : uuidv4 })
-    id: string;
+  @Prop({ required: true })
+  title: string;
 
-    @Prop({ required: true})
-    title : string;
+  @Prop()
+  description: string;
 
-    @Prop()
-    description: string;
+  @Prop({ default: null })
+  source: string;
 
-    @Prop({default: null})
-    source: string;
+  @Prop({ default: 0 })
+  score: number;
 
-    @Prop({ default: 0})
-    score: number;
-
-    @Prop()
-    idCourse: string;
+  @Prop()
+  idCourse: string;
 }
 
 export const VideoSchema = SchemaFactory.createForClass(Video);

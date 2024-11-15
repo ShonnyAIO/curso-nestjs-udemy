@@ -7,8 +7,9 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class VideosService {
-
-  constructor(@InjectModel(Video.name) private readonly videoModel: Model<VideoDocument>){}
+  constructor(
+    @InjectModel(Video.name) private readonly videoModel: Model<VideoDocument>,
+  ) {}
 
   create(createVideoDto: CreateVideoDto) {
     return this.videoModel.create(createVideoDto);
@@ -19,15 +20,15 @@ export class VideosService {
   }
 
   findOne(id: string) {
-    return this.videoModel.findOne({id});
+    return this.videoModel.findOne({ id });
   }
 
   update(id: string, updateVideoDto: UpdateVideoDto) {
-    return this.videoModel.findOneAndUpdate({id}, updateVideoDto);
+    return this.videoModel.findOneAndUpdate({ id }, updateVideoDto);
   }
 
   remove(id: string) {
-    return this.videoModel.findOneAndDelete({id});
+    return this.videoModel.findOneAndDelete({ id });
   }
 
   addVideo(id: string, filename: string) {

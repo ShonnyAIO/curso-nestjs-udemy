@@ -16,17 +16,15 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     JwtModule.registerAsync({
       useFactory: () => {
         return {
-          signOptions: { expiresIn: '4d'},
-          secret: process.env.JWT_SECRET
-        }
-      }
+          signOptions: { expiresIn: '4d' },
+          secret: process.env.JWT_SECRET,
+        };
+      },
     }),
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema}
-    ])
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService]
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -6,12 +6,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Video, VideoSchema } from './models/videos.schema';
 
 @Module({
-  imports: [CoursesModule, MongooseModule.forFeature([
-    {
-      name : Video.name,
-      schema: VideoSchema
-    }
-  ])], // Importar el modulo para trabajar con ellos
+  imports: [
+    CoursesModule,
+    MongooseModule.forFeature([
+      {
+        name: Video.name,
+        schema: VideoSchema,
+      },
+    ]),
+  ], // Importar el modulo para trabajar con ellos
   controllers: [VideosController],
   providers: [VideosService],
 })

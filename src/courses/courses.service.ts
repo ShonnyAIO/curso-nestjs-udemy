@@ -7,23 +7,23 @@ import { User, UserDocument } from 'src/users/models/users.schema';
 import { Model, Types } from 'mongoose';
 
 interface ModelExt<T> extends Model<T> {
-  delete:Function;
+  delete: Function;
   findAllCourses: Function;
   paginate: Function;
 }
 
-
 @Injectable()
 export class CoursesService {
-
-  constructor(@InjectModel(Course.name) private readonly courseModel:ModelExt<CourseDocument>,
-  @InjectModel(User.name) private readonly userModel: ModelExt<UserDocument>){}
+  constructor(
+    @InjectModel(Course.name)
+    private readonly courseModel: ModelExt<CourseDocument>,
+    @InjectModel(User.name) private readonly userModel: ModelExt<UserDocument>,
+  ) {}
   // Injectar los modelos de otros schemas que necesitamos iteractuar con ellos
-
 
   create(createCourseDto: CreateCourseDto) {
     // ERR Comunes: const user = this.userModel.find()
-    return this.courseModel.create(createCourseDto)
+    return this.courseModel.create(createCourseDto);
   }
 
   async findAll(pagination: any) {
@@ -62,20 +62,20 @@ export class CoursesService {
   }
 
   findOne(id: string) {
-    return this.courseModel.find({id});
+    return this.courseModel.find({ id });
   }
 
-  findOneByTitle(title: string){
-    return this.courseModel.find({title});
+  findOneByTitle(title: string) {
+    return this.courseModel.find({ title });
   }
 
   update(id: string, updateCourseDto: UpdateCourseDto) {
-    return this.courseModel.findOneAndUpdate({id}, updateCourseDto);
+    return this.courseModel.findOneAndUpdate({ id }, updateCourseDto);
   }
 
   async remove(id: string) {
     const _id = new Types.ObjectId(id);
-    const response = this.courseModel.delete({_id});
+    const response = this.courseModel.delete({ _id });
     return response;
   }
 }

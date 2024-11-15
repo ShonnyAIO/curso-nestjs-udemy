@@ -9,9 +9,7 @@ import { PaginationV2Middleware } from 'src/pagination-v2/pagination-v2.middlewa
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-    ]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeatureAsync([
       {
         name: Course.name,
@@ -19,16 +17,18 @@ import { PaginationV2Middleware } from 'src/pagination-v2/pagination-v2.middlewa
           const schema = CourseSchema;
           schema.plugin(require('mongoose-paginate-v2'));
           return schema;
-        }
-      }
+        },
+      },
     ]),
   ],
   controllers: [CoursesController],
   providers: [CoursesService],
-  exports: [CoursesService] // Para poder exportar el servicio y usarlo en otros modulos
+  exports: [CoursesService], // Para poder exportar el servicio y usarlo en otros modulos
 })
 export class CoursesModule {
-  configure(consumer: MiddlewareConsumer){
-    consumer.apply(PaginationV2Middleware).forRoutes({ path: 'v1/courses', method: RequestMethod.GET });
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(PaginationV2Middleware)
+      .forRoutes({ path: 'v1/courses', method: RequestMethod.GET });
   }
 }
