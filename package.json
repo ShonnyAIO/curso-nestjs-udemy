@@ -7,17 +7,17 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/apps/app-cursos-examples/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/app-cursos-examples/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -28,12 +28,15 @@
     "@nestjs/event-emitter": "^2.1.1",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "*",
+    "@nestjs/microservices": "^10.4.8",
     "@nestjs/mongoose": "^10.0.10",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-fastify": "^10.4.1",
+    "@nestjs/platform-socket.io": "^10.4.8",
     "@nestjs/serve-static": "^4.0.2",
     "@nestjs/swagger": "^7.4.2",
+    "@nestjs/websockets": "^10.4.8",
     "@types/multer": "^1.4.12",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^5.7.6",
@@ -48,6 +51,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "socket.io": "^4.8.1",
     "swagger-ui-express": "^5.0.1",
     "url-slug": "^4.0.1",
     "uuid": "^11.0.3"
@@ -84,7 +88,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -92,7 +96,10 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/apps/"
+    ]
   }
 }
